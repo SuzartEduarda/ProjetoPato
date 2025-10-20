@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feynman Duck - Choose a topic</title>
+  <style>
+    /* Basic reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #fefdf9;
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    header .logo {
+      width: 120px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin: 15px 0 25px;
+      text-align: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 25px 15px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+      width: 65px;
+      height: 65px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-weight: bold;
+      font-size: 1rem;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="imgs/pato_principal.png" alt="Duck Logo" class="logo">
+  </header>
+
+  <main>
+    <h1>Choose a topic</h1>
+
+    <section class="grid">
+      <div class="card" onclick="select('Giraffe')">
+        <img src="imgs/girafa_branco.jpg" alt="Giraffe">
+        <p>Giraffe</p>
+      </div>
+
+      <div class="card" onclick="select('Alligator')">
+        <img src="imgs/Jacare.png" alt="Alligator">
+        <p>Alligator</p>
+      </div>
+
+      <div class="card" onclick="select('Zebra')">
+        <img src="imgs/zebra.png" alt="Zebra">
+        <p>Zebra</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Function to redirect based on selection
+    function select(topic) {
+      if (topic === 'Giraffe') {
+        window.location.href = 'in_giraffe.html';
+      } else if (topic === 'Alligator') {
+        window.location.href = 'in_jacare.html';
+      } else if (topic === 'Zebra') {
+        window.location.href = 'in_zebra.html';
+      } else {
+        alert("You selected: " + topic + "\n\nMore content coming soon!");
+        // For other topics, you can add future redirects:
+        // window.location.href = topic.toLowerCase() + ".html";
+      }
+    }
+  </script>
+</body>
+</html>
