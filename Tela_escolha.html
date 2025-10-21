@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pato Feynman - Escolha o Idioma</title>
+  <title>Pato Feynman - Escolha o Modo</title>
   <style>
-    /* Reset básico */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    * { 
+        margin: 0; 
+        padding: 0; 
+        box-sizing: border-box; 
     }
-
     body {
       font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
       background: #7d84e0;
@@ -23,19 +21,16 @@
       min-height: 100vh;
       padding: 20px;
     }
-
-    header .logo {
-      width: 500px;
-      margin-bottom: 30px;
+    header .logo { 
+        width: 500px; 
+        margin-bottom: 30px; 
     }
-
-    h1 {
-      font-size: 1.6rem;
-      margin: 15px 0 25px;
-      text-align: center;
-      color: yellow;
+    h1 { 
+        font-size: 1.6rem; 
+        margin: 15px 0 25px; 
+        text-align: center; 
+        color: #000000b6; 
     }
-
     .question {
       font-size: 1.4rem;
       margin: 10px 0 30px;
@@ -43,7 +38,6 @@
       color: #4a4a4a;
       line-height: 1.4;
     }
-
     .grid {
       display: flex;
       justify-content: center;
@@ -51,8 +45,8 @@
       gap: 18px;
       width: 100%;
       max-width: 500px;
+      margin-bottom: 20px;
     }
-
     .card {
       background: #fff;
       border-radius: 12px;
@@ -64,24 +58,35 @@
       flex: 1;
       max-width: 200px;
     }
-
     .card:hover {
       transform: scale(1.05);
       box-shadow: 0 5px 12px rgba(0,0,0,0.2);
     }
-
     .card p {
       font-weight: bold;
       font-size: 1rem;
       color: #333;
     }
-
-    .portuguese {
-      background: #23af23;
+    .modo-pato { 
+        background: #fffb1c; 
     }
-
-    .english {
-      background: #3434db;
+    .modo-site { 
+        background: #2eff2e; 
+    }
+    .portuguese { 
+        background: #1fe678bb; 
+    }
+    .english { 
+        background: #eb2626c5; 
+    }
+    #idioma, #idioma-opcoes { 
+        display: none; 
+    }
+    #mensagemIndisponivel { 
+        display: none; 
+        color: white; 
+        margin-bottom: 20px; 
+        text-align: center; 
     }
   </style>
 </head>
@@ -91,18 +96,37 @@
   </header>
 
   <main>
-    <h1>Vamos Brincar com o Duck!</h1>
-    
-    <div class="question">
-       Oba! Em qual idioma você quer se divertir hoje?<br>
-      <span style="font-size: 1.1rem; color: #666;"> "Yay! In what language do you want to have fun today? </span>
+    <!-- Pergunta 1: Modo de brincadeira -->
+    <div class="question" id="perguntaModo">
+        <h1>Vamos Brincar</h1>
+      Como você quer brincar?<br>
+      <span style="font-size: 1.1rem; color: #666;">How do you want to play today?</span>
     </div>
 
-    <section class="grid">
+    <div id="mensagemIndisponivel">
+      O pato está brincando com outra criança.<br>
+      Você pode brincar só no site por enquanto 😊
+    </div>
+
+    <section class="grid" id="modo">
+      <div class="card modo-pato" id="botaoPato" onclick="selecionarModo('pato')">
+        <p>Com o Duck</p>
+      </div>
+      <div class="card modo-site" onclick="selecionarModo('site')">
+        <p>Sem o Duck</p>
+      </div>
+    </section>
+
+    <!-- Pergunta 2: Idioma -->
+    <div class="question" id="idioma">
+      Oba! Em qual idioma você quer se divertir hoje?<br>
+      <span style="font-size: 1.1rem; color: #666;">Yay! In what language do you want to have fun today?</span>
+    </div>
+
+    <section class="grid" id="idioma-opcoes">
       <div class="card portuguese" onclick="selecionarIdioma('portugues')">
         <p>Português 🇧🇷</p>
       </div>
-
       <div class="card english" onclick="selecionarIdioma('ingles')">
         <p>English 🇺🇸</p>
       </div>
@@ -110,20 +134,50 @@
   </main>
 
   <script>
-    // Função para redirecionar com base na escolha do idioma
-    function selecionarIdioma(idioma) {
-      if (idioma === 'portugues') {
-        // Redireciona para a tela principal em português após 2 segundos
-        setTimeout(() => {
-          window.location.href = 'Tela_Principal.html';
-        }, 2000);
-      } else if (idioma === 'ingles') {
-        // Redireciona para a tela principal em inglês após 2 segundos
-        setTimeout(() => {
-          window.location.href = 'in_Tela_Principal.html';
-        }, 2000);
+    let modoEscolhido = "";
+
+    async function verificarPatoDisponivel() {
+      try {
+        const resposta = await fetch("https://seu-backend-render.com/status-pato");
+        const dados = await resposta.json();
+
+        if (dados.ocupado) {
+          document.getElementById("botaoPato").style.display = "none";
+          document.getElementById("mensagemIndisponivel").style.display = "block";
+        }
+      } catch (erro) {
+        console.error("Erro ao verificar o status do pato:", erro);
+        document.getElementById("botaoPato").style.display = "none";
+        document.getElementById("mensagemIndisponivel").style.display = "block";
       }
     }
+
+    function selecionarModo(modo) {
+      modoEscolhido = modo;
+
+      // Esconde tudo da pergunta anterior
+      document.getElementById("modo").style.display = "none";
+      document.getElementById("perguntaModo").style.display = "none";
+      document.getElementById("mensagemIndisponivel").style.display = "none";
+
+      // Mostra a pergunta de idioma
+      document.getElementById("idioma").style.display = "block";
+      document.getElementById("idioma-opcoes").style.display = "flex";
+
+      // Se escolheu brincar com o pato, marca como ocupado
+      if (modo === "pato") {
+        fetch("https://seu-backend-render.com/ocupar-pato", { method: "POST" });
+      }
+    }
+
+    function selecionarIdioma(idioma) {
+      localStorage.setItem("idioma", idioma);
+      localStorage.setItem("modo", modoEscolhido);
+      window.location.href = idioma === 'portugues' ? 'Tela_Principal.html' : 'in_Tela_Principal.html';
+    }
+
+    verificarPatoDisponivel();
   </script>
 </body>
 </html>
+
